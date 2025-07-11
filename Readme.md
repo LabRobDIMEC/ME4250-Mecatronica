@@ -6,7 +6,7 @@ Aquí puedes ver los cuatro proyectos principales que presentaron:
 
 1. **M0-V balancin inspirado en Walle**
    
-   ![Foto del Proyecto 1](Pics/mo-v.jpg|width=100)
+   ![Foto del Proyecto 1](Pics/mo-v.jpg | width=100)
    [Link Proyecto](https://github.com/CarlosCornejoM/M0-V.git)
 
 3. **Circus**
