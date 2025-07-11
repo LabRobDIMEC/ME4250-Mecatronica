@@ -4,22 +4,30 @@
 
 Aquí puedes ver los cuatro proyectos principales que presentaron:
 
-1. **M0-V balancin inspirado en Walle**
+1. **M0-V**
    
-   ![Foto del Proyecto 1](Pics/mo-v.jpg | width=100)
+   <img src="Pics/mo-v.jpg"  width="300">
+   
    [Link Proyecto](https://github.com/CarlosCornejoM/M0-V.git)
 
-3. **Circus**
+2. **Circus**
    
-   ![Foto del Proyecto 2](Pics/circus.jpg|width=100)
+   <img src="Pics/circus.jpg" width="300">
 
-4. **Man On Wire**
-   
-   ![Foto del Proyecto 3](Pics/manonwire.jpg|width=100)
+   [Link Proyecto]()
 
-5. **Pengusurf Club**
+3. **Man On Wire**
+
+   <img src="Pics/manonwire.jpg" width="300"
+
+   [Link Proyecto](https://github.com/julioechavarria/Mecatr-nica---Man-on-the-Wire.git)
    
-   ![Foto del Proyecto 4](Pics/pengusurf.jpg|width=100)
+
+4. **Pengusurf Club**
+   
+   <img src="Pics/pengusurf.jpg" width="300">
+
+   [Link Proyecto](https://github.com/201ms/Pengusurf-Club.git)
 
 Además, vas a encontrar ejemplos, ejercicios y recursos útiles para seguir aprendiendo y compartiendo ideas sobre electrónica, programación y robótica.
 
