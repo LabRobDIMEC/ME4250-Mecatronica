@@ -18,7 +18,7 @@ Aquí puedes ver los cuatro proyectos principales que presentaron:
 
 3. **Man On Wire**
 
-   <img src="Pics/manonwire.jpg" width="300"
+   <img src="Pics/manonwire.jpg" width="300">
 
    [Link Proyecto](https://github.com/julioechavarria/Mecatr-nica---Man-on-the-Wire.git)
    
