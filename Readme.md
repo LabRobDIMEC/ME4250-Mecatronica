@@ -6,19 +6,19 @@ Aquí puedes ver los cuatro proyectos principales que presentaron:
 
 1. **M0-V balancin inspirado en Walle**
    
-   ![Foto del Proyecto 1](ruta/a/la/foto1.jpg)
+   ![Foto del Proyecto 1](Pics/mo-v.jpg)
 
 2. **Nombre del Proyecto 2**
    
-   ![Foto del Proyecto 2](ruta/a/la/foto2.jpg)
+   ![Foto del Proyecto 2](Pics/circus.jpg)
 
 3. **Nombre del Proyecto 3**
    
-   ![Foto del Proyecto 3](ruta/a/la/foto3.jpg)
+   ![Foto del Proyecto 3](Pics/manonwire.jpg)
 
 4. **Nombre del Proyecto 4**
    
-   ![Foto del Proyecto 4](ruta/a/la/foto4.jpg)
+   ![Foto del Proyecto 4](Pics/pingusurf.jpg)
 
 Además, vas a encontrar ejemplos, ejercicios y recursos útiles para seguir aprendiendo y compartiendo ideas sobre electrónica, programación y robótica.
 
