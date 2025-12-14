@@ -1,5 +1,6 @@
 # M4250 Mecatrónica
 
+# ------------- WORK IN PROGRESS -----------------
 ¡Bienvenido! Este repositorio reúne los proyectos que hicimos en el curso de Mecatrónica ME4250 del semestre de Otoño de 2025. Todos los grupos trabajamos en carros balancines, aplicando el mismo principio del péndulo invertido, pero cada uno le dio su propio estilo y diseño.
 
 Aquí puedes ver los cuatro proyectos principales que presentaron:
