@@ -1,0 +1,240 @@
+///////////////////////////////////////////////////////////////
+//  CONTROL DE ROLL CON MPU6050 + PID + L298N (DOS MOTORES)  //
+///////////////////////////////////////////////////////////////
+
+#include <Wire.h>
+
+//////////////////// CONFIGURACIÓN DEL MPU-6050 ////////////////////
+const int MPU_ADDR = 0x68;   // Dirección I2C del MPU-6050
+
+int16_t ax, ay, az;          // Acelerómetro
+int16_t gx, gy, gz;          // Giroscopio
+
+int16_t gx_offset = 0, gy_offset = 0, gz_offset = 0;
+
+float roll = 0, pitch = 0, yaw = 0;
+
+//////////////////// CONFIGURACIÓN DEL PID ////////////////////
+float Kp = 850;      // Ganancia proporcional
+float Ki = 10;      // Ganancia integral
+float Kd = 120;      // Ganancia derivativa
+
+float setpoint = 103.0;     // Ángulo objetivo de roll (equilibrio)
+float error_prev = 0.0;
+float integral = 0.0;
+float derivada = 0.0;
+float salida = 0.0;
+int pwm = 0;
+
+//////////////////// CONFIGURACIÓN DE TIEMPO ////////////////////
+unsigned long lastTime = 0;
+const unsigned long sampleTime = 10; // [ms] periodo de actualización
+float dt = 0.0;                      // [s] intervalo de tiempo real
+
+//////////////////// CONFIGURACIÓN DEL L298N ////////////////////
+// Motor A
+const int IN1 = 8;
+const int IN2 = 9;
+const int ENA = 5;  // PWM
+
+// Motor B
+const int IN3 = 10;
+const int IN4 = 11;
+const int ENB = 6;  // PWM
+
+
+////////////////////////////////////////////////////////////////
+//                      CONFIGURACIÓN INICIAL
+////////////////////////////////////////////////////////////////
+// Calibración del giroscopio
+void calibrarMPU6050() {
+  long sumX = 0, sumY = 0, sumZ = 0;
+  const int samples = 1000;   // cantidad de lecturas para promediar
+
+  Serial.println("=== Calibrando giroscopio ===");
+  Serial.println("Mantén el robot completamente quieto...");
+
+  delay(2000); // tiempo para estabilizar
+
+  for (int i = 0; i < samples; i++) {
+    readMPU6050();   // lee los valores sin compensar
+    sumX += gx;
+    sumY += gy;
+    sumZ += gz;
+    delay(3);        // pequeña pausa entre muestras
+  }
+
+  gx_offset = sumX / samples;
+  gy_offset = sumY / samples;
+  gz_offset = sumZ / samples;
+
+  Serial.println("Calibración completada:");
+  Serial.print("gx_offset = "); Serial.println(gx_offset);
+  Serial.print("gy_offset = "); Serial.println(gy_offset);
+  Serial.print("gz_offset = "); Serial.println(gz_offset);
+}
+
+ 
+
+
+
+void setup() {
+  Serial.begin(115200);
+  Wire.begin();
+
+  // Inicializar MPU-6050
+  Wire.beginTransmission(MPU_ADDR);
+  Wire.write(0x6B);        // Registro de power management
+  Wire.write(0);           // Despertar el MPU-6050
+  Wire.endTransmission(true);
+
+  // === Calibrar giroscopio antes de iniciar ===
+  calibrarMPU6050();
+
+  // Configurar pines de motores
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(ENA, OUTPUT);
+
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+  pinMode(ENB, OUTPUT);
+
+  // Inicializar motores apagados
+  detenerMotores();
+
+  Serial.println("Sistema inicializado correctamente.");
+  lastTime = millis();
+}
+
+////////////////////////////////////////////////////////////////
+//                      BUCLE PRINCIPAL
+////////////////////////////////////////////////////////////////
+void loop() {
+  unsigned long now = millis();
+  if (now - lastTime >= sampleTime) {
+    // === 1) Calcular dt ===
+    dt = (now - lastTime) / 1000.0;   // convertir a segundos
+    lastTime = now;
+
+    // === 2) Leer sensor MPU ===
+    readMPU6050();
+
+    // Conversión de giroscopio a °/s
+    float gyroX = (gx - gx_offset) / 131.0;
+    float gyroY = (gy - gy_offset) / 131.0;
+    float gyroZ = (gz - gz_offset) / 131.0;
+
+    // Actualización del ángulo yaw por integración del giroscopio
+    yaw += gyroZ * dt;
+
+    // Calcular roll y pitch con acelerómetro
+    float ax_f = (float)ax;
+    float ay_f = (float)ay;
+    float az_f = (float)az;
+
+    float denominator = sqrt(ay_f * ay_f + az_f * az_f);
+    if (denominator < 0.0001) denominator = 0.0001;
+
+    roll = atan2(ay_f, az_f) * 180.0 / PI;
+    pitch = atan2(-ax_f, denominator) * 180.0 / PI;
+
+    // === 3) Calcular PID sobre roll ===
+    float input = roll;
+    float error = setpoint - input;
+
+    float P = Kp * error;
+    integral += error * dt;
+    float I = Ki * integral;
+    derivada = (error - error_prev) / dt;
+    float D = Kd * derivada;
+
+    salida = P + I + D;
+
+    // Limitación de salida PWM y anti-windup
+    if (salida > 255) {
+      salida = 255;
+      integral -= error * dt;
+    } else if (salida < -255) {
+      salida = -255;
+      integral -= error * dt;
+    }
+
+    pwm = (int)constrain(salida * (1.0 + 2.0 / (fabs(error) + 0.5)), -255, 255);
+
+    // === 4) Mover motores según salida PID ===
+    moverMotores(pwm);
+
+     // === 5) Mostrar datos sincronizados ===
+    float t_sec = now / 1000.0; // tiempo absoluto en segundos (float)
+
+    // Imprimimos columnas separadas por tabulador:
+    // tiempo[s] \t error \t P \t I \t D \t pwm \n
+    Serial.print(t_sec, 3); Serial.print('\t');    // tiempo en s con 3 decimales
+    Serial.print(error, 3);   Serial.print('\t');  // error
+    Serial.print(P, 3);       Serial.print('\t');  // componente proporcional
+    Serial.print(I, 3);       Serial.print('\t');  // componente integral
+    Serial.print(D, 3);       Serial.print('\t');  // componente derivativa
+    Serial.println(pwm);                          // pwm (int) y salto de línea
+
+
+
+    // Actualizar variables
+    error_prev = error;
+  }
+}
+
+////////////////////////////////////////////////////////////////
+//                      FUNCIONES AUXILIARES
+////////////////////////////////////////////////////////////////
+
+// Lectura del MPU-6050
+void readMPU6050() {
+  Wire.beginTransmission(MPU_ADDR);
+  Wire.write(0x3B); // Dirección de inicio (acelerómetro)
+  Wire.endTransmission(false);
+  Wire.requestFrom(MPU_ADDR, 14, true);
+
+  ax = Wire.read() << 8 | Wire.read();
+  ay = Wire.read() << 8 | Wire.read();
+  az = Wire.read() << 8 | Wire.read();
+  gx = Wire.read() << 8 | Wire.read();
+  gy = Wire.read() << 8 | Wire.read();
+  gz = Wire.read() << 8 | Wire.read();
+}
+
+// Mover los motores según la señal de control
+void moverMotores(int pwm) {
+  if (pwm > 0) {
+    // Invertido
+    digitalWrite(IN1, LOW);
+    digitalWrite(IN2, HIGH);
+    digitalWrite(IN3, LOW);
+    digitalWrite(IN4, HIGH);
+    analogWrite(ENA, pwm);
+    analogWrite(ENB, pwm);
+
+} else if (pwm < 0) {
+    // Invertido
+    digitalWrite(IN1, HIGH);
+    digitalWrite(IN2, LOW);
+    digitalWrite(IN3, HIGH);
+    digitalWrite(IN4, LOW);
+    analogWrite(ENA, -pwm);
+    analogWrite(ENB, -pwm);
+}
+ else {
+    // Detener motores
+    detenerMotores();
+  }
+}
+
+// Apagar motores (sin señal PWM)
+void detenerMotores() {
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, LOW);
+  analogWrite(ENA, 0);
+  analogWrite(ENB, 0);
+}

@@ -1,0 +1,17 @@
+Tabla de Componentes Electrónicos y Materiales
+
+  Nº   Componente / Material
+  ---- ------------------------
+  1    Arduino UNO
+  2    Driver L298N
+  3    Motores DC
+  4    Ruedas
+  5    Acelerómetro ADXL345
+  6    Portabaterías
+  7    Baterías
+  8    Interruptor
+  9    Cables
+  10   LED
+  11   Carcasa impresa en PLA
+  12   Bandeja impresa en PLA
+  13   Figura impresa en PLA

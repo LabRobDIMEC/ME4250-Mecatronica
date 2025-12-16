@@ -1,0 +1,275 @@
+#include <AccelStepper.h>
+#include <Wire.h>
+#include <PID_v1.h>
+#include <math.h>
+
+// ====================================================================
+// 1. CONFIGURACIÓN GENERAL
+// ====================================================================
+#define ADXL_ADDR_PRIMARY  0x53
+#define ADXL_ADDR_SECONDARY 0x1D
+byte ADXL_ADDR = 0x53;
+
+const float SCALE_FACTOR = 256.0;
+const unsigned long CAL_TIME_MS = 3000;
+float angle_offset = 0.0;
+
+// ====================================================================
+// 2. PINES MOTORES
+// ====================================================================
+const int MI_DIR_PIN = 8;
+const int MI_STP_PIN = 9;
+const int MI_EN_PIN  = 10;
+
+const int MD_DIR_PIN = 5;
+const int MD_STP_PIN = 6;
+const int MD_EN_PIN  = 7;
+
+AccelStepper motorL(AccelStepper::DRIVER, MI_STP_PIN, MI_DIR_PIN);
+AccelStepper motorR(AccelStepper::DRIVER, MD_STP_PIN, MD_DIR_PIN);
+
+// ====================================================================
+// 3. AJUSTES DE MOVIMIENTO
+// ====================================================================
+
+// Peso del PID ? pasos. Sigue limitado aprox. a ~1 rps, pero más fuerte.
+const float DIST_FACTOR = 0.64;     // antes 0.064
+
+#define MOTOR_L_POLARITY +1
+#define MOTOR_R_POLARITY -1         // invertido
+
+// Relación ángulo ? pasos (base)
+const float K_ANGLE_BASE = 7.0;
+
+// Mínimo movimiento
+const long MIN_MOVE_STEPS = 1;
+
+// Límites de seguridad de ángulo
+const float ANGLE_LIMIT_FORWARD  = 20;   // nuevo
+const float ANGLE_LIMIT_BACKWARD = -16;  // nuevo
+
+// Ángulo donde empieza el BOOST del PID
+const float ANGLE_BOOST_START    = 10.0; // nuevo
+
+// Máximo de pasos permitidos por acción (para que no se dispare)
+const long MAX_STEPS_PER_ACTION  = 150;
+
+// Tiempo de recuperación de emergencia
+const unsigned long RECOVERY_TIME_MS = 5000;
+
+// ====================================================================
+// 4. PID
+// ====================================================================
+double Kp = 10.0;
+double Ki = 0.01;
+double Kd = 0.1;
+
+double Input, Output, Setpoint;
+
+PID myPID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
+
+// ====================================================================
+// 5. SENSADO (ADXL345)
+// ====================================================================
+void writeRegister(byte reg, byte val) {
+  Wire.beginTransmission(ADXL_ADDR);
+  Wire.write(reg);
+  Wire.write(val);
+  Wire.endTransmission();
+}
+
+void setupADXL345() {
+  writeRegister(0x2D, 0x08); // POWER_CTL: medir
+  writeRegister(0x31, 0x01); // DATA_FORMAT: ±4g
+  writeRegister(0x2C, 0x0A); // BW_RATE: 100 Hz
+}
+
+void readRaw(int16_t &x, int16_t &y, int16_t &z) {
+  Wire.beginTransmission(ADXL_ADDR);
+  Wire.write(0x32);
+  Wire.endTransmission(false);
+
+  Wire.requestFrom((uint8_t)ADXL_ADDR, (uint8_t)6);
+
+  x = (Wire.read() | Wire.read() << 8);
+  y = (Wire.read() | Wire.read() << 8);
+  z = (Wire.read() | Wire.read() << 8);
+}
+
+float readAngleRaw() {
+  int16_t X, Y, Z;
+  readRaw(X, Y, Z);
+
+  float Xg = X / SCALE_FACTOR;
+  float Yg = Y / SCALE_FACTOR;
+  float Zg = Z / SCALE_FACTOR;
+
+  // Usa el mismo eje que te estaba funcionando
+  float angleRad = atan2(Zg, Yg);
+  return angleRad * 180.0 / PI;
+}
+
+void calibrateAngle() {
+  Serial.println("=== CALIBRACIÓN DE ÁNGULO ===");
+  Serial.println("Mantenga el robot en equilibrio durante 5 segundos...");
+  unsigned long t0 = millis();
+  float sum = 0;
+  long count = 0;
+
+  while (millis() - t0 < 5000) {
+    float ang = readAngleRaw();
+    Serial.print("Ángulo actual: ");
+    Serial.println(ang);
+    sum += ang;
+    count++;
+    delay(50);
+  }
+
+  angle_offset = sum / count;
+  Serial.print("Offset calibrado: ");
+  Serial.println(angle_offset);
+}
+
+// ====================================================================
+// 6. MOTORES
+// ====================================================================
+void moveBalanced(long steps) {
+  long Ls = steps * MOTOR_L_POLARITY;
+  long Rs = steps * MOTOR_R_POLARITY;
+
+  motorL.move(Ls);
+  motorR.move(Rs);
+
+  while (motorL.distanceToGo() != 0 || motorR.distanceToGo() != 0) {
+    motorL.run();
+    motorR.run();
+  }
+}
+
+// ====================================================================
+// 7. RECUPERACIÓN
+// ====================================================================
+void attemptRecovery(float angle) {
+  Serial.println("? Intentando recuperación...");
+
+  unsigned long t0 = millis();
+
+  while (millis() - t0 < RECOVERY_TIME_MS) {
+
+    float ang = readAngleRaw() - angle_offset;
+
+    if (ang < ANGLE_LIMIT_FORWARD && ang > ANGLE_LIMIT_BACKWARD) {
+      Serial.println("? Recuperado");
+      return;
+    }
+
+    long corr = 70;
+    if (ang > 0) corr = -70;
+
+    moveBalanced(corr);
+  }
+
+  Serial.println("? Sin recuperación. Drivers OFF.");
+  digitalWrite(MI_EN_PIN, HIGH);
+  digitalWrite(MD_EN_PIN, HIGH);
+}
+
+// ====================================================================
+// 8. SETUP
+// ====================================================================
+void setup() {
+  Serial.begin(9600);
+  Wire.begin();
+
+  // Detección del ADXL345
+  Serial.println("Buscando ADXL345...");
+  Wire.beginTransmission(ADXL_ADDR_PRIMARY);
+  if (Wire.endTransmission() == 0) {
+    ADXL_ADDR = ADXL_ADDR_PRIMARY;
+    Serial.println("ADXL345 detectado en 0x53");
+  } else {
+    Wire.beginTransmission(ADXL_ADDR_SECONDARY);
+    if (Wire.endTransmission() == 0) {
+      ADXL_ADDR = ADXL_ADDR_SECONDARY;
+      Serial.println("ADXL345 detectado en 0x1D");
+    } else {
+      Serial.println("? No se encontró ADXL345.");
+      while (1);
+    }
+  }
+
+  setupADXL345();
+
+  pinMode(MI_EN_PIN, OUTPUT);
+  pinMode(MD_EN_PIN, OUTPUT);
+  digitalWrite(MI_EN_PIN, LOW);
+  digitalWrite(MD_EN_PIN, LOW);
+
+  motorL.setMaxSpeed(6000);
+  motorR.setMaxSpeed(6000);
+  motorL.setAcceleration(12000);
+  motorR.setAcceleration(12000);
+
+  calibrateAngle();
+
+  Setpoint = 0.0;
+  myPID.SetMode(AUTOMATIC);
+  myPID.SetOutputLimits(-100, 100);
+
+  Serial.println("Sistema listo.");
+}
+
+// ====================================================================
+// 9. LOOP PRINCIPAL
+// ====================================================================
+void loop() {
+
+  float angle = readAngleRaw() - angle_offset;
+  Input = angle;
+
+  // Límite de seguridad
+  if (angle > ANGLE_LIMIT_FORWARD || angle < ANGLE_LIMIT_BACKWARD) {
+    attemptRecovery(angle);
+    return;
+  }
+
+  myPID.Compute();
+  double out = Output;
+
+  // BOOST sobre el PID cuando ya está bastante inclinado
+  if (fabs(angle) > ANGLE_BOOST_START) {
+    float maxA = (angle > 0 ? ANGLE_LIMIT_FORWARD : fabs(ANGLE_LIMIT_BACKWARD));
+    float lvl  = (fabs(angle) - ANGLE_BOOST_START) / (maxA - ANGLE_BOOST_START);
+    out *= (1.0 + lvl * 0.4);
+  }
+
+  // === NUEVA RELACIÓN POTENTE ÁNGULO ? PASOS ===
+  float absA = fabs(angle);
+  float angleGain;
+
+  if (absA < 3.0)         angleGain = 0.8;  // zona muy cercana al equilibrio
+  else if (absA < 10.0)   angleGain = 1.8;  // inclinación media
+  else                    angleGain = 3.0;  // inclinación grande ? fuerte
+
+  double stepsAngleF = angle * angleGain * K_ANGLE_BASE;   // pasos por ángulo
+  long   stepsAngle  = (long)stepsAngleF;
+
+  // Aporte del PID (más fuerte que antes)
+  long stepsPID = (long)(out * DIST_FACTOR);
+
+  long steps = stepsAngle + stepsPID;
+
+  // Limitar locuras
+  if (steps >  MAX_STEPS_PER_ACTION) steps =  MAX_STEPS_PER_ACTION;
+  if (steps < -MAX_STEPS_PER_ACTION) steps = -MAX_STEPS_PER_ACTION;
+
+  if (abs(steps) >= MIN_MOVE_STEPS)
+    moveBalanced(steps);
+
+  Serial.print("Ángulo: ");
+  Serial.print(angle);
+  Serial.print(" | PID: ");
+  Serial.print(Output);
+  Serial.print(" | steps: ");
+  Serial.println(steps);
+}
