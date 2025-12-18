@@ -68,13 +68,13 @@ A continuación se presentan los robots autobalancines desarrollados durante el 
 A continuación se presenta el árbol de directorios para la navegación de los contenidos del semestre:
 
 ```text
-2025-2/
-├── Material Docente/
+📂 2025-2/
+├── 📂 Material Docente/
 │   ├── Auxiliares/             # Guías y material de clases prácticas
 │   ├── Cátedras/               # Presentaciones y teoría
 │   └── Curso/                  # Documentación administrativa
-├── Multimedia/                 # Imágenes y recursos visuales del curso
-├── Repositories/               # Carpetas de proyectos semestrales
+├── 📂 Multimedia/                 # Imágenes y recursos visuales del curso
+├── 📂 Repositories/               # Carpetas de proyectos semestrales
 │   ├── README.md               # Archivo índice con créditos de los grupos
 │   ├── Bienvenidos-al-Himalaya/
 │   ├── Camarera/
@@ -85,7 +85,7 @@ A continuación se presenta el árbol de directorios para la navegación de los 
 │   ├── Robot-Motocicleta/
 │   ├── Segway Monkey/
 │   └── WALL-E/
-└── Utilidades/                 # Recursos técnicos de apoyo
+└── 📂 Utilidades/                 # Recursos técnicos de apoyo
     ├── CAD Fusion360/          # Librerías y archivos de diseño
     └── Códigos/                # Scripts base y ejemplos de programación
 
