@@ -60,7 +60,7 @@ A continuación se detalla el equipo de ingeniería y docencia responsable de la
 | **Profesor** | Harold Valenzuela |
 | **Auxiliares** | Francisco Cáceres, Fernando Navarrete |
 | **Ayudantes** | Valentina Abarca, Ignacio Núñez, Fernanda Echeverría, Emilia Gutiérrez |
-| **Acceso Rápido** | [📂 Ir a la carpeta 2025-2](https://www.google.com/search?q=./2025-2/) |
+| **Acceso Rápido** | [📄 Ir al README 2025-2](2025-2/README.md) |
 
 ### 📅 Semestre 2025-1 (Otoño)
 
@@ -68,10 +68,10 @@ A continuación se detalla el equipo de ingeniería y docencia responsable de la
 
 | Rol | Integrantes |
 | --- | --- |
-| **Profesor** | *[Nombre del Profesor]* |
-| **Auxiliares** | *[Nombres de Auxiliares]* |
-| **Ayudantes** | *[Nombres de Ayudantes]* |
-| **Acceso Rápido** | [📂 Ir a la carpeta 2025-1](https://www.google.com/search?q=./2025-1/) |
+| **Profesor** | Harold Valenzuela |
+| **Auxiliares** | Francisco Cáceres, Fernando Navarrete |
+| **Ayudantes** | Valentina Abarca |
+| **Acceso Rápido** | [📄 Ir al README 2025-1](2025-1/README.md) |
 
 ---
 
