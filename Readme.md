@@ -1,62 +1,89 @@
-#-----------------------------**WORK IN PROGRESS**------------------------------#
+# 🚧----------------------------- WORK IN PROGRESS ------------------------------🚧
 
 # 🤖 ME4250 - Curso de Mecatrónica
 
-¡Bienvenido al repositorio central del curso de Mecatrónica **ME4250**!
+¡Bienvenido al repositorio central del curso de **Mecatrónica ME4250** de la Universidad de Chile!
 
-Este espacio recopila el conocimiento, los códigos y la documentación generada a lo largo de los semestres. Aquí encontrarás tanto los desafíos técnicos como los proyectos finales desarrollados por los estudiantes, sirviendo como una base de conocimiento colaborativa.
-
----
-
-## 📚 Ejes del Curso
-
-El curso se estructura sobre **cuatro pilares fundamentales** que permiten la integración completa de sistemas mecatrónicos:
-
-1.  **Microcontroladores:** El cerebro del sistema (Arduino, ESP32, STM32, etc.).
-2.  **Actuadores:** Elementos que generan movimiento y acción física.
-3.  **Sensores:** La percepción del entorno y recolección de datos.
-4.  **Control PID:** La lógica matemática para gobernar el sistema con precisión.
+Este repositorio actúa como una base de conocimiento incremental, centralizando el material docente, los códigos fuente, las librerías de utilidades y el registro histórico de los proyectos desarrollados por los estudiantes semestre a semestre.
 
 ---
 
-## 🚀 Metodología: Aprendizaje Incremental
+## 📚 Filosofía y Ejes del Curso
 
-La particularidad de este curso es que **el aprendizaje es progresivo**. El proyecto principal no se realiza al final, sino que se construye a lo largo del semestre a medida que se profundiza en la materia.
+El curso aborda la integración sinérgica de la ingeniería mecánica, electrónica y control. La metodología se basa en un aprendizaje progresivo a través de cuatro pilares fundamentales:
 
-Para dominar cada uno de los ejes temáticos, el curso cuenta con **3 Desafíos o Plataformas** específicas antes de la integración final:
+1.  **Microcontroladores:** El cerebro del sistema (Arduino, ESP32, STM32).
+2.  **Actuadores:** Conversión de señales eléctricas a movimiento físico (Motores DC, Steppers, Servos).
+3.  **Sensores:** Percepción del entorno (IMUs, Visión, Ultrasonido).
+4.  **Control:** Lógica matemática (PID, Lógica Difusa) para gobernar el sistema con precisión.
 
-### 1. Actuadores: Control de Motores ⚙️
-En este desafío nos enfocamos en el movimiento. Se trabaja con distintos tipos de motores (DC, Stepper, Servos) y drivers para entender las curvas de potencia, precisión y torque.
-* *Ubicación: Carpeta `/Desafios/Actuadores`*
-
-### 2. Sensores: Color Sorting (Clasificación) 🎨
-Aquí el foco es la percepción. Se implementan sistemas capaces de detectar y diferenciar objetos basados en colores, integrando lógica de decisión en tiempo real.
-* *Ubicación: Carpeta `/Desafios/Sensores`*
-
-### 3. Control: Ball and Beam ⚖️
-El desafío definitivo de control. Se utiliza una plataforma de "Bola y Viga" para implementar y sintonizar lazos de control **PID**, logrando estabilizar un sistema inherentemente inestable.
-* *Ubicación: Carpeta `/Desafios/PID`*
+Antes del proyecto final, se validan estas competencias mediante desafíos técnicos modulares (Control de Motores, Sorting por Color, Ball and Beam).
 
 ---
 
-## 📂 Estructura del Repositorio
+## 📂 Arquitectura del Repositorio (Pipeline)
 
-Este repositorio está organizado para facilitar la navegación entre los desafíos técnicos y los proyectos finales de cada generación.
+La estructura de directorios está organizada cronológicamente. Cada carpeta de semestre contiene su propio ecosistema de archivos (Material Docente, Repositorios de Alumnos, Desafíos).
 
 ```text
-ME4250-Mecatronica/
+ME4250-MECATRONICA/
 │
-├── 📂 Desafios/                # Código base y ejemplos de las 3 plataformas
-│   ├── 01_Actuadores_Motores
-│   ├── 02_Sensores_Sorting
-│   └── 03_Control_BallAndBeam
+├── 📂 2025-2/                      # Semestre Primavera 2025 (Actual)
+│   ├── 📂 Desafíos/                # Plataformas de pruebas (Actuadores, Sensores, PID)
+│   ├── 📂 Material Docente/        # Cátedras y Auxiliares
+│   ├── 📂 Repositories/            # Proyectos Semestrales (Robots Autobalancines)
+│   └── 📂 Utilidades/              # Recursos específicos del semestre
 │
-├── 📂 Proyectos_Otoño_2025/    # Temática: Carros Balancines (Péndulo Invertido)
-│   ├── M0-V
-│   ├── Circus
-│   ├── Man On Wire
-│   └── Pengusurf Club
+├── 📂 2025-1/                      # Semestre Otoño 2025 (Histórico)
+│   ├── 📂 Desafíos/
+│   ├── 📂 Material Docente/
+│   └── 📂 Repositories/
 │
-├── 📂 Proyectos_Semestre_X/    # Próximos proyectos
+├── 📂 Utilidades/                  # Librerías Globales y Recursos Comunes (CADs base, Datasheets)
 │
-└── README.md
+└── 📄 README.md                    # Archivo raíz (Usted está aquí)
+
+```
+
+---
+
+## 🏛️ Historial Académico y Cuerpo Docente
+
+A continuación se detalla el equipo de ingeniería y docencia responsable de la ejecución del curso en cada periodo.
+
+### 📅 Semestre 2025-2 (Primavera)
+
+**Enfoque del Proyecto:** Robots Autobalancines (Péndulo Invertido)
+
+| Rol | Integrantes |
+| --- | --- |
+| **Profesor** | Harold Valenzuela |
+| **Auxiliares** | Francisco Cáceres, Fernando Navarrete |
+| **Ayudantes** | Valentina Abarca, Ignacio Núñez, Fernanda Echeverría, Emilia Gutiérrez |
+| **Acceso Rápido** | [📂 Ir a la carpeta 2025-2](https://www.google.com/search?q=./2025-2/) |
+
+### 📅 Semestre 2025-1 (Otoño)
+
+**Enfoque del Proyecto:** *[Definir temática, ej: Brazos Robóticos]*
+
+| Rol | Integrantes |
+| --- | --- |
+| **Profesor** | *[Nombre del Profesor]* |
+| **Auxiliares** | *[Nombres de Auxiliares]* |
+| **Ayudantes** | *[Nombres de Ayudantes]* |
+| **Acceso Rápido** | [📂 Ir a la carpeta 2025-1](https://www.google.com/search?q=./2025-1/) |
+
+---
+
+## 🛠️ Stack Tecnológico General
+
+Herramientas transversales utilizadas en todas las versiones del curso:
+
+* **Firmware:** C++ (Arduino IDE / PlatformIO), Python.
+* **Hardware:** Arduino Nano/Uno, ESP32, Drivers (L298N, A4988), IMUs (MPU6050).
+* **Diseño Mecánico:** Autodesk Fusion 360.
+* **Control de Versiones:** Git & GitHub.
+
+---
+
+**Departamento de Ingeniería Mecánica | Universidad de Chile**
