@@ -51,9 +51,9 @@ A continuación se presentan los robots autobalancines desarrollados durante el 
       <a href="Repositories/Robot-Motocicleta"><b>Robot-Motocicleta</b></a>
     </td>
     <td align="center">
-      <img src="Multimedia/Fotos/Segway_Monkey.jpg" alt="Segway Monkey" width="100%">
+      <img src="Multimedia/Fotos/Segway_Monkey.jpg" alt="Segway-Monkey" width="100%">
       <br>
-      <a href="Repositories/Segway Monkey"><b>Segway Monkey</b></a>
+      <a href="Repositories/Segway-Monkey"><b>Segway Monkey</b></a>
     </td>
     <td align="center">
       <img src="Multimedia/Fotos/WALL-E.jpg" alt="WALL-E" width="100%">
