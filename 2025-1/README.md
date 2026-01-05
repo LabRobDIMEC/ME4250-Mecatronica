@@ -7,26 +7,26 @@ Aquí puedes ver los cuatro proyectos principales que presentaron:
 
 1. **M0-V**
    
-   <img src="images/mo-v.jpg"  width="300">
+   <img src="Multimedia/Fotos/mo-v.jpg"  width="300">
    
    [Link Proyecto](https://github.com/CarlosCornejoM/M0-V.git)
 
 2. **Circus**
    
-   <img src="images/circus.jpg" width="300">
+   <img src="Multimedia/Fotos/circus.jpg" width="300">
 
    [Link Proyecto](https://github.com/arantzaamc/Proyecto-mecatronica.git)
 
 3. **Man On Wire**
 
-   <img src="images/manonwire.jpg" width="300">
+   <img src="Multimedia/Fotos/manonwire.jpg" width="300">
 
    [Link Proyecto](https://github.com/julioechavarria/Mecatr-nica---Man-on-the-Wire.git)
    
 
 4. **Pengusurf Club**
    
-   <img src="images/pengusurf.jpg" width="300">
+   <img src="Multimedia/Fotos/pengusurf.jpg" width="300">
 
    [Link Proyecto](https://github.com/201ms/Pengusurf-Club.git)
 
