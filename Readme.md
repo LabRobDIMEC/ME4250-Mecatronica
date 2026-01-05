@@ -1,5 +1,3 @@
-# 🚧----------------------------- WORK IN PROGRESS ------------------------------🚧
-
 # 🤖 ME4250 - Curso de Mecatrónica
 
 ¡Bienvenido al repositorio central del curso de **Mecatrónica ME4250** de la Universidad de Chile!
@@ -28,20 +26,19 @@ La estructura de directorios está organizada cronológicamente. Cada carpeta de
 ```text
 ME4250-MECATRONICA/
 │
-├── 📂 2025-2/                      # Semestre Primavera 2025 (Actual)
-│   ├── 📂 Desafíos/                # Plataformas de pruebas (Actuadores, Sensores, PID)
+├── 📂 2025-1/                      
 │   ├── 📂 Material Docente/        # Cátedras y Auxiliares
-│   ├── 📂 Repositories/            # Proyectos Semestrales (Robots Autobalancines)
+│   ├── 📂 Multimedia/              # Registros audiovisuales
+│   ├── 📂 Repositorios/            # Proyectos Semestrales
 │   └── 📂 Utilidades/              # Recursos específicos del semestre
 │
-├── 📂 2025-1/                      # Semestre Otoño 2025 (Histórico)
-│   ├── 📂 Desafíos/
-│   ├── 📂 Material Docente/
-│   └── 📂 Repositories/
+├── 📂 2025-2/                      
+│   ├── 📂 Material Docente/        # Cátedras y Auxiliares
+│   ├── 📂 Multimedia/              # Registros audiovisuales
+│   ├── 📂 Repositorios/            # Proyectos Semestrales
+│   └── 📂 Utilidades/              # Recursos específicos del semestre
 │
-├── 📂 Utilidades/                  # Librerías Globales y Recursos Comunes (CADs base, Datasheets)
-│
-└── 📄 README.md                    # Archivo raíz (Usted está aquí)
+└── 📄 README.md                
 
 ```
 
@@ -64,7 +61,7 @@ A continuación se detalla el equipo de ingeniería y docencia responsable de la
 
 ### 📅 Semestre 2025-1 (Otoño)
 
-**Enfoque del Proyecto:** *[Definir temática, ej: Brazos Robóticos]*
+**Enfoque del Proyecto:** Robots Autobalancines (Primera Iteración)
 
 | Rol | Integrantes |
 | --- | --- |
