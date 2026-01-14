@@ -38,6 +38,11 @@ ME4250-MECATRONICA/
 │   ├── 📂 Repositorios/            # Proyectos Semestrales
 │   └── 📂 Utilidades/              # Recursos específicos del semestre
 │
+├── 📂 Desafíos/
+│   ├── 📂 Desafío_1/        # Documentación del Desafío 1 de Mecatrónica 
+│   ├── 📂 Desafío_2/        # Documentación del Desafío 2 de Mecatrónica 
+│   └── 📂 Desafío_3/        # Documentación del Desafío 3 de Mecatrónica 
+│  
 └── 📄 README.md                
 
 ```
