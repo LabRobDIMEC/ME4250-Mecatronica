@@ -2,7 +2,14 @@
 ### Temática: Actuadores Electromecánicos y Motores DC
 
 ![Ratmóvil](Multimedia/autito.jpg)
+Vista Isométrica
 
+---
+
+![Ratmóvil](Multimedia/autito_sup.jpg)
+Vista Superior
+
+---
 ## Contexto: La Liga "Fast & Rats"
 Las carreras de autos conducidas por ratones se han vuelto muy populares. Como equipo de ingeniería, el objetivo es preparar nuestro vehículo ("Ratmóvil") y a su piloto para competir en la prestigiosa liga **Fast & Rats**.
 
@@ -20,8 +27,9 @@ La evaluación se centra en la correcta implementación del hardware y software 
 ## Estructura de Archivos
 
 ```text
-📂 Desafío 1/
+📂 Desafío_1/
 ├── 📂 CAD/             # Modelos 3D del chasis (Fusion360 y .step)
+├── 📂 Código/          # Firmware (.ino) y librerías utilizadas
 ├── 📂 Documentos/      # Enunciado oficial (PDF) y Datasheets
 ├── 📂 Electrónica/     # Esquemas de conexión y PCB del driver
 ├── 📂 Multimedia/      # Fotos y videos del funcionamiento
